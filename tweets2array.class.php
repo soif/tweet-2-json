@@ -9,7 +9,7 @@ Updated by Soif - https://github.com/soif
 version 1.0
 */
 
-class Twitter2array {
+class Tweets2array {
 
 
 	//here are the strings this script uses to find the data it wants. 

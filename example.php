@@ -1,10 +1,10 @@
 <?php
 //Require Class ##############################################################
-include(dirname(__FILE).'/twitter2array.class.php');
+include(dirname(__FILE).'/tweets2array.class.php');
 
 //INIT #######################################################################
-//$tw=new Twitter2array('json'); //use this if you want to output json
-$tw=new Twitter2array();
+//$tw=new Tweets2array('json'); //use this if you want to output json
+$tw=new Tweets2array();
 
 
 // CACHE (optionnal) #########################################################

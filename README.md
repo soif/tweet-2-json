@@ -1,8 +1,8 @@
-#twitter2array Documentation
+#tweets2array Documentation
 
 ##About 
 
-twitter2array is a Twitter scraper that functions like an API. It takes data publicly available on Twitter.com and reformats it into programming-friendly Array or JSON for your hacking needs.
+tweets2array is a Twitter scraper that functions like an API. It takes data publicly available on Twitter.com and reformats it into programming-friendly Array or JSON for your hacking needs.
 ###But doesn't Twitter already have an API?
 
 Yep--and if you're OK with their terms of use you should use it. 
@@ -17,13 +17,13 @@ Some reasons you might want to use this instead:
 
 ##Setup
 
-twitter2array is stupidly easy to install: download the script and put it where you want to run it. It uses `json_encode()` and so requires PHP 5.2 or better.
+tweets2array is stupidly easy to install: download the script and put it where you want to run it. It uses `json_encode()` and so requires PHP 5.2 or better.
 
-Comments in the code and the [Usage](#usage) section below will indicate how to target the tweets you want. By default, twitter2array.php returns an array.
+Comments in the code and the [Usage](#usage) section below will indicate how to target the tweets you want. By default, tweets2array.php returns an array.
 
- If you're using PHP and integrating twitter2array into an existing script, then
+ If you're using PHP and integrating tweets2array into an existing script, then
 	
-	include('twitter2array.class.php'); 
+	include('tweets2array.class.php'); 
 
 will do it, provided the file path in your `include()` is correct.
 
@@ -33,17 +33,17 @@ will do it, provided the file path in your `include()` is correct.
 
 ###Init
 
-	$tw=new twitter2array();
+	$tw=new tweets2array();
 
 will initialize the class, and results will be arrays object.
 
 If you want to init the class like the original (legacy) tweet2json.php , do this:
-	$tw=new twitter2array('json');
+	$tw=new tweets2array('json');
 
 The output will be JSON encoded.
 
 ###Methods
-twitter2array has two main public methods: `GetUser()`, which returns tweet data from a public account by username, and `GetSearch()`, which returns public tweet data from Twitter search based on a given query.
+tweets2array has two main public methods: `GetUser()`, which returns tweet data from a public account by username, and `GetSearch()`, which returns public tweet data from Twitter search based on a given query.
 
 you might cache queries by using the `SetCache()` method. (See example.php file)
 
