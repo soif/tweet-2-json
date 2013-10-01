@@ -20,13 +20,13 @@ class Tweets2array {
 		'content-explode-top'    => 	' tweet-text',    //relies on another class being assigned before it. very sketchy.
 		'content-explode-bottom' => 	'</p>',
 		'avatar-explode-top'	 =>		'class="account-group', //actually, any explode scraping is kinda sketch
-		'avatar-explode-bottom'  =>		'<strong',
+		'avatar-explode-bottom'  =>		'/strong>',
 	
 		'avatar-regex'           => 	array(
 											'user'   => '/href\="([\/A-z0-9-_]*)/',
 											'id'     => '/data-user-id\="([0-9-_]*)/',
 											'img'    => '/src\="([A-z0-9\-\_\:\/\/\.]*)/',
-											'name'   => '/alt\="([A-z0-9\-\_\:\/\/\.\s]*)/'
+											'name'   => '/show-popup-with-id">([^<]*)/'
 										),
 									
 		'links-regex'			 => 	'/<a class="details with-icn js-details" href="([\/A-z0-9]*)">/',
