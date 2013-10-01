@@ -366,15 +366,18 @@ class Tweets2array {
 			}
 			array_push($all_tweets, $each_tweet);
 		}
-		$this->StoreCache($all_tweets);
-		return $all_tweets;
+		$out=array(
+			'tweets' =>$all_tweets
+		);
+		$this->StoreCache($out);
+		return $out;
 	}
 
 
 	// ---------------------------------------------------------------------------------------------------------------------
 	private function FormatOutput($array) {
 		if($this->output_format=='json'){
-			return json_encode(array('tweets' => $array));	
+			return json_encode($array);	
 		}
 		return $array;
 	}
