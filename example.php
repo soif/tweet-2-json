@@ -19,7 +19,7 @@ $user_name2	="obama";
 ini_set('default_charset', 'utf-8');
 
 echo "<pre>\n";
-print_r($tw->GetUser($user_name1,10));
+print_r($tw->GetUser($user_name1,10,TRUE));
 
 echo "<hr>\n";
 print_r($tw->GetSearch($user_name2,10));
