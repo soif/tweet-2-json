@@ -175,7 +175,7 @@ class Tweets2array {
 
 	// ---------------------------------------------------------------------------------------------------------------------
 	//pulls the timestamps from a tweet
-	private function unix_dates($source) {
+	private function tweet_dates($source) {
 		preg_match_all($this->finders['dates-regex'], $source, $timestamps);
 		return($timestamps[1]);
 	}
@@ -314,7 +314,7 @@ class Tweets2array {
 		$avatars= $this->tweet_avatar($source, $itr);
 		$tweets	= $this->tweet_content($source, $itr);
 		$links	= $this->tweet_links($source, $itr);
-		$dates	= $this->unix_dates($source);
+		$dates	= $this->tweet_dates($source);
 	
 		//some characters that need attention
 		$html_scrubs = array('&nbsp;','&#39;','&quot;', '&lt;', '&rt;');
