@@ -38,6 +38,7 @@ will do it, provided the file path in your `include()` is correct.
 will initialize the class, and results will be arrays object.
 
 If you want to init the class like the original (legacy) tweet2json.php , do this:
+
 	$tw=new tweets2array('json');
 
 The output will be JSON encoded.
