@@ -1,8 +1,8 @@
-#tweet2json Documentation
+#twitter2array Documentation
 
 ##About 
 
-tweet2json is a Twitter scraper that functions like an API. It takes data publicly available on Twitter.com and reformats it into programming-friendly JSON for your hacking needs.
+twitter2array is a Twitter scraper that functions like an API. It takes data publicly available on Twitter.com and reformats it into programming-friendly Array or JSON for your hacking needs.
 ###But doesn't Twitter already have an API?
 
 Yep--and if you're OK with their terms of use you should use it. 
@@ -17,26 +17,41 @@ Some reasons you might want to use this instead:
 
 ##Setup
 
-tweet2json is stupidly easy to install: download the script and put it where you want to run it. It uses `json_encode()` and so requires PHP 5.2 or better.
+twitter2array is stupidly easy to install: download the script and put it where you want to run it. It uses `json_encode()` and so requires PHP 5.2 or better.
 
-Comments in the code and the [Usage](#usage) section below will indicate how to target the tweets you want. By default, tweet2json.php returns a JSON object for my \([@cosmocatalano](http://twitter.com/cosmocatalano)\) latest tweet.
+Comments in the code and the [Usage](#usage) section below will indicate how to target the tweets you want. By default, twitter2array.php returns an array.
 
- If you're using PHP and integrating tweet2json into an existing script, then
+ If you're using PHP and integrating twitter2array into an existing script, then
 	
-	include('tweet2json.php'); 
+	include('twitter2array.class.php'); 
 
 will do it, provided the file path in your `include()` is correct.
 
 <a id="usage"></a>
 ##Usage
 
-tweet2json has two methods: `user_tweets()`, which returns tweet data from a public account by username, and `search_tweets()`, which returns public tweet data from Twitter search based on a given query.
 
-###user_tweets
+###Init
 
-`user_tweets()`  returns tweet data from a public account by username. It accepts four arguments, only of which is required.
+	$tw=new twitter2array();
 
->user\_tweets(**username** [string, required], **results** [integer, default = 0 (returns all), max = ~20], **cards** [boolean, default = FALSE])
+will initialize the class, and results will be arrays object.
+
+If you want to init the class like the original (legacy) tweet2json.php , do this:
+	$tw=new twitter2array('json');
+
+The output will be JSON encoded.
+
+###Methods
+twitter2array has two main public methods: `GetUser()`, which returns tweet data from a public account by username, and `GetSearch()`, which returns public tweet data from Twitter search based on a given query.
+
+you might cache queries by using the `SetCache()` method. (See example.php file)
+
+####GetUser Method
+
+`GetUser()`  returns tweet data from a public account by username. It accepts four arguments, only of which is required.
+
+>GetUser(**username** [string, required], **results** [integer, default = 0 (returns all), max = ~20], **cards** [boolean, default = FALSE])
 
 **username** is the username for the public twitter account you're targeting. As a string, it needs to be set off with single or double quotes.
 
@@ -46,32 +61,31 @@ tweet2json has two methods: `user_tweets()`, which returns tweet data from a pub
 
 An example command:
 
-	user_tweets('cosmocatalano', 1, TRUE);
+	$tw->GetUser('cosmocatalano', 1, TRUE);
 
-####Return
+#####Return
 
-`user_tweets()` Returns a JSON object with an entry for each tweet. It looks like this:
+`GetUser()` Returns an Array object with an entry for each tweet. It looks like this:
 
-	{
-		"tweets": [
-			{
-				"url": "http://twitter.com/cosmocatalano/status/343768531101417474",
-				"text": "This is a test tweet. @ Sufferloft http://instagram.com/p/aWFnSJInU-/ ",
-				"html": "This is a test tweet. @ Sufferloft <a href=\"http://t.co/XRaizXhwYz\" rel=\"nofollow\" dir=\"ltr\" data-expanded-url=\"http://instagram.com/p/aWFnSJInU-/\" class=\"twitter-timeline-link\" target=\"_blank\" title=\"http://instagram.com/p/aWFnSJInU-/\" ><span class=\"invisible\">http://</span><span class=\"js-display-url\">instagram.com/p/aWFnSJInU-/</span><span class=\"invisible\"></span><span class=\"tco-ellipsis\"><span class=\"invisible\">&nbsp;</span></span></a>",
-				"date": "1370795779",
-				"user": "/cosmocatalano",
-				"id": "14503633",
-				"img": "https://si0.twimg.com/profile_images/2225916199/image_normal.jpg",
-				"name": "Cosmo Catalano",
-				"rt": false,
-				"card": {
-					"href": "http://instagram.com/p/aWFnSJInU-/",
-					"data-url": "http://distilleryimage2.ak.instagram.com/9d54f23ed12211e29fe522000a1f97ce_5.jpg",
-					"data-resolved-url-large": "http://distilleryimage2.ak.instagram.com/9d54f23ed12211e29fe522000a1f97ce_7.jpg"
-				}
-			}
-		]
-	}
+    [3] => Array
+        (
+            [url] => http://twitter.com/cosmocatalano/status/384801341216133120
+            [text] => Rx-only toothpaste I had an Rx for but bought on Amazon (w/o proof of Rx) instead. Rx is fucking dumb.… http://instagram.com/p/e5pCcyondH/ 
+            [html] => Rx-only toothpaste I had an Rx for but bought on Amazon (w/o proof of Rx) instead. Rx is fucking dumb.… <a href="http://t.co/WjxmxSLYUQ" rel="nofollow" dir="ltr" data-expanded-url="http://instagram.com/p/e5pCcyondH/" class="twitter-timeline-link" target="_blank" title="http://instagram.com/p/e5pCcyondH/" ><span class="tco-ellipsis"></span><span class="invisible">http://</span><span class="js-display-url">instagram.com/p/e5pCcyondH/</span><span class="invisible"></span><span class="tco-ellipsis"><span class="invisible">&nbsp;</span></span></a>
+            [date] => 1380578763
+            [user] => /cosmocatalano
+            [id] => 14503633
+            [img] => https://si0.twimg.com/profile_images/2225916199/image_normal.jpg
+            [name] => 
+            [rt] => 
+            [card] => Array
+                (
+                    [href] => http://instagram.com/p/e5pCcyondH/
+                    [data-url] => http://distilleryimage11.ak.instagram.com/3b7840722a1c11e390e022000a1fd202_8.jpg
+                    [data-resolved-url-large] => http://distilleryimage11.ak.instagram.com/3b7840722a1c11e390e022000a1fd202_8.jpg
+                )
+
+        )
  
 **url** is the permalink of the tweet.
 
@@ -104,11 +118,11 @@ For _video_ (Vine, YouTube, Vimeo):
 *	**iframe** the HTML iframe that displays the video.
 *	**href** the location of the page containing the video.
 
-###search_tweets 
+####GetSearch Method
 
-`search_tweets()` returns public tweet data from Twitter search based on a given query. It accepts four arguments, one of which is required.
+`GetSearch()` returns public tweet data from Twitter search based on a given query. It accepts four arguments, one of which is required.
 
->search\_tweets(**query** [string, required],**results** [integer, default = 0 (returns all), max = ~20], **cards** [boolean, default = FALSE], **realtime** [boolean, default = TRUE])
+>GetSearch(**query** [string, required],**results** [integer, default = 0 (returns all), max = ~20], **cards** [boolean, default = FALSE], **realtime** [boolean, default = TRUE])
 
 **query** is the string you're searching Twitter for. As a string, it needs to be set off with single or double quotes. You _can_ still use double quotes to match a string exactly. The command also accepts spaces, octothorps ('#') to look for hashtags, at-signs ('@') to search for replies, but may gag on other special characters, especially if they're HTML code. You've been warned.
 
@@ -120,11 +134,11 @@ For _video_ (Vine, YouTube, Vimeo):
 
 An example command:
 
-	search_tweets('obama', 1, TRUE, FALSE);
+	$tw->GetSearch('obama', 1, TRUE, FALSE);
 	
-####Return
+#####Return
 
-`search_tweets()` Returns a JSON object with an entry for each tweet, with the same values as `user_tweets()` listed above.
+`GetSearch()` Returns a JSON object with an entry for each tweet, with the same values as `user_tweets()` listed above.
 
 
 ##FAQ
