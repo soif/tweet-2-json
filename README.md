@@ -96,7 +96,7 @@ An example command:
 
 **date** is the Unix timestamp of the tweet.
 
-**user** is the username of the tweet author, with a leading slash.
+**user** is the username of the tweet author
 
 **id** is the user id of the tweet author.
 

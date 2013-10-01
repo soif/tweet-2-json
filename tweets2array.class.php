@@ -347,7 +347,7 @@ class Tweets2array {
 				'text'   => html_entity_decode(str_replace($html_scrubs, $html_ringers, strip_tags($tweets[$i]))),
 				'html'  => $tweets[$i],
 				'date' 	 => $dates[$i],
-				'user'   => $avatars[$i][0],
+				'user'   => preg_replace('#^/#','',$avatars[$i][0]),
 				'id'     => $avatars[$i][1],
 				'img'    => $avatars[$i][2],
 				'name'   => $avatars[$i][3],
