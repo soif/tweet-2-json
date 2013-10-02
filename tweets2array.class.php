@@ -71,6 +71,9 @@ class Tweets2array {
 	var $cache_file		='';
 	var $cache_id		='';
 	
+	// a very popular agent, grabbed from http://techblog.willshouse.com/2012/01/03/most-common-user-agents/
+	var $user_agent		="Mozilla/5.0 (Windows NT 6.1; WOW64; rv:23.0) Gecko/20100101 Firefox/23.0";
+	
 	//#######################################################################################################################
 	// PUBLIC METHODS #######################################################################################################
 	//#######################################################################################################################
@@ -239,11 +242,19 @@ class Tweets2array {
 	// ---------------------------------------------------------------------------------------------------------------------
 	// need to be improved, using curl, supporting timeout, user-agent, etc....
 	private function Fetch($url){
+		//do not announce us as 'PHP', but rather as a very popular agent
+		$opts = array( 
+			'http'=> array( 
+				'method'=>   "GET", 
+				'user_agent'=> $this->user_agent
+				)
+		);
+
 		if($this->cache_mode=='out'){
-			return file_get_contents($url);
+			return file_get_contents($url,0,stream_context_create($opts));
 		}
 		if(! $result=$this->LoadCache($url)){
-			$result=file_get_contents($url);
+			$result=file_get_contents($url,0,stream_context_create($opts));
 			$this->StoreCache($result);
 		}
 		return $result;
