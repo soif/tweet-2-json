@@ -15,34 +15,50 @@ class Tweets2array {
 	//here are the strings this script uses to find the data it wants. 
 	//Twitter might change them—they're up here so you can update & repair easily.
 	var $finders = array(
-	    'onebox-find'			 =>	    '/<div class="onebox[\s\S]*<h2 class="/U',
-	    'onebox-replace' 		 =>		'<h2 class="',
-		'content-explode-top'    => 	' tweet-text',    //relies on another class being assigned before it. very sketchy.
-		'content-explode-bottom' => 	'</p>',
-		'avatar-explode-top'	 =>		'class="account-group', //actually, any explode scraping is kinda sketch
-		'avatar-explode-bottom'  =>		'/strong>',
-	
-		'avatar-regex'           => 	array(
+	    'onebox-find'			=>	    '/<div class="onebox[\s\S]*<h2 class="/U',
+	    'onebox-replace' 		=>		'<h2 class="',
+
+		'content-explode-top'	=> 	' tweet-text',    //relies on another class being assigned before it. very sketchy.
+		'content-explode-bottom'=> 	'</p>',
+		
+		'profile_regexs'		=>		array(
+											'name' 				=>'#"fullname\seditable-group">.*?"profile-field">([^<]+)#s',
+											'bio' 				=>'#"bio\sprofile-field">([^<]+)#s',
+											'location' 			=>'#"location\sprofile-field">([^<]+)#s',
+											'url' 				=>'#"url editable-group".*?"profile-field">.*?title="([^"]+)#s',
+											'img'				=>'#data-resolved-url-large="([^"]+)#s',
+										),
+
+		'stats_regexs'		=>		array(
+											'id'				=>'#"stats\sjs-mini-profile-stats"\sdata-user-id="([^"]+)#s',
+											'tweets_count'		=>'#data-nav=\'profile\'.*?<strong>([^<]+)#s',
+											'followers_count'	=>'#data-nav=\'followers\'.*?<strong>([^<]+)#s',
+											'following_count'	=>'#data-nav=\'following\'.*?<strong>([^<]+)#s',
+										),
+
+		'avatar-explode-top'	=>		'class="account-group', //actually, any explode scraping is kinda sketch
+		'avatar-explode-bottom'	=>		'/strong>',
+		'avatar_regexs' 		=> 	array(
 											'user'   => '/href\="([\/A-z0-9-_]*)/',
 											'id'     => '/data-user-id\="([0-9-_]*)/',
 											'img'    => '/src\="([A-z0-9\-\_\:\/\/\.]*)/',
 											'name'   => '/show-popup-with-id">([^<]*)/'
 										),
 									
-		'links-regex'			 => 	'/<a class="details with-icn js-details" href="([\/A-z0-9]*)">/',
-		'dates-regex'       	 => 	'/data\-time\="([0-9]*)"/',
-		'cards-regex'			 => 	'/media-thumbnail[^&][\s\SA-z0-9\"\=\-\:\/\?\&\;\_]*>/U',
-		'video-regex'			 =>		'/<iframe class="card2-player-iframe"[\s\S]*<\/h3>/',
+		'links-regex'			=> 	'/<a class="details with-icn js-details" href="([\/A-z0-9]*)">/',
+		'dates-regex'       	=> 	'/data\-time\="([0-9]*)"/',
+		'cards-regex'			=> 	'/media-thumbnail[^&][\s\SA-z0-9\"\=\-\:\/\?\&\;\_]*>/U',
+		'video-regex'			=>		'/<iframe class="card2-player-iframe"[\s\S]*<\/h3>/',
 	
-		'cards-data' 			 => 	array(
+		'cards_data_regexs' 	=> 	array(
 											'href'   => 'href',
 											'src'    => 'data-url',
 											'src-lg' => 'data-resolved-url-large'
-										),
-		'video-data' 			 => 	array(
+									),
+		'video_data_regexs' 	=> 	array(
 											'iframe'   => '/(<iframe class="card2-player-iframe"[\s\S]*<\/iframe>)/',
 											'href'    => '/href="([\S]*)"/',
-										)							
+									)							
 	);
 
 	var $output_format	='array'; 	// json | array
@@ -144,7 +160,7 @@ class Tweets2array {
 	// ---------------------------------------------------------------------------------------------------------------------
 	//This pulls avatar src, username (of tweeter), name, id
 	private function tweet_avatar($source, $itr) {
-		$patterns = $this->finders['avatar-regex'];
+		$patterns = $this->finders['avatar_regexs'];
 		$shards = explode($this->finders['avatar-explode-top'], $source);
 		$avatars = array();
 		if ($itr == FALSE) {
@@ -178,6 +194,28 @@ class Tweets2array {
 	private function tweet_dates($source) {
 		preg_match_all($this->finders['dates-regex'], $source, $timestamps);
 		return($timestamps[1]);
+	}
+
+	// ---------------------------------------------------------------------------------------------------------------------
+	//pulls profile infos
+	private function extract_profile($source) {
+		$out=array();
+		foreach($this->finders['profile_regexs'] as $key => $pattern){
+			preg_match($pattern, $source, $matches);
+			$out[$key]=trim(html_entity_decode($matches[1]));
+		}
+		return $out;
+	}
+
+	// ---------------------------------------------------------------------------------------------------------------------
+	//pulls stats infos
+	private function extract_stats($source) {
+		$out=array();
+		foreach($this->finders['stats_regexs'] as $key => $pattern){
+			preg_match($pattern, $source, $matches);
+			$out[$key]=trim(preg_replace('#[^\d]+#','',$matches[1]));
+		}
+		return $out;
 	}
 
 	// ---------------------------------------------------------------------------------------------------------------------
@@ -235,7 +273,7 @@ class Tweets2array {
 			$vid_pattern = $this->finders['video-regex'];
 			preg_match($vid_pattern, $source, $vid_matches);
 			if ($vid_matches !== array()) {
-				$needles = $this->finders['video-data'];
+				$needles = $this->finders['video_data_regexs'];
 				$card_data = array();
 				foreach ($needles as $eye => $needle) {
 					preg_match($needle, $vid_matches[0], $vid_cards);
@@ -274,7 +312,7 @@ class Tweets2array {
 	//returning to a situation where standard twitter card matches are found	
 		}
 		else{
-			$targets = $this->finders['cards-data']; 
+			$targets = $this->finders['cards_data_regexs']; 
 			$card_data = array();
 			foreach($targets as $target) {
 				preg_match('/'.$target.'="([\S]*)"/', $matches[0], $card_attr); //this shouldn't need to change
@@ -308,6 +346,12 @@ class Tweets2array {
 
 		//initial scrape
 		$onebox_source = $this->Fetch("http://twitter.com/".$search.$target);
+
+		// get profile
+		$out=$this->extract_profile($onebox_source);
+		$out=array_merge($out,$this->extract_stats($onebox_source));
+
+		//extract tweets
 		$source = $this->kill_onebox($onebox_source);
 
 		//re-organizing the data with functions
@@ -366,9 +410,8 @@ class Tweets2array {
 			}
 			array_push($all_tweets, $each_tweet);
 		}
-		$out=array(
-			'tweets' =>$all_tweets
-		);
+
+		$out['tweets']=$all_tweets;
 		$this->StoreCache($out);
 		return $out;
 	}
