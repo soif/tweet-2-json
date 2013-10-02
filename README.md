@@ -68,45 +68,80 @@ An example command:
 
 `GetUser()` Returns an Array object with an entry for each tweet. It looks like this:
 
-    [3] => Array
-        (
-            [url] => http://twitter.com/cosmocatalano/status/384801341216133120
-            [text] => Rx-only toothpaste I had an Rx for but bought on Amazon (w/o proof of Rx) instead. Rx is fucking dumb.… http://instagram.com/p/e5pCcyondH/ 
-            [html] => Rx-only toothpaste I had an Rx for but bought on Amazon (w/o proof of Rx) instead. Rx is fucking dumb.… <a href="http://t.co/WjxmxSLYUQ" rel="nofollow" dir="ltr" data-expanded-url="http://instagram.com/p/e5pCcyondH/" class="twitter-timeline-link" target="_blank" title="http://instagram.com/p/e5pCcyondH/" ><span class="tco-ellipsis"></span><span class="invisible">http://</span><span class="js-display-url">instagram.com/p/e5pCcyondH/</span><span class="invisible"></span><span class="tco-ellipsis"><span class="invisible">&nbsp;</span></span></a>
-            [date] => 1380578763
-            [user] => /cosmocatalano
-            [id] => 14503633
-            [img] => https://si0.twimg.com/profile_images/2225916199/image_normal.jpg
-            [name] => 
-            [rt] => 
-            [card] => Array
-                (
-                    [href] => http://instagram.com/p/e5pCcyondH/
-                    [data-url] => http://distilleryimage11.ak.instagram.com/3b7840722a1c11e390e022000a1fd202_8.jpg
-                    [data-resolved-url-large] => http://distilleryimage11.ak.instagram.com/3b7840722a1c11e390e022000a1fd202_8.jpg
-                )
+	Array
+	(
+		[name] => Cosmo Catalano
+		[bio] => I'm from the government, and I'm here to help.
+		[location] => Hartford, CT, USA
+		[url] => http://cosmocatalano.com
+		[img] => https://si0.twimg.com/profile_images/2225916199/image.jpg
+		[id] => 14503633
+		[tweets_count] => 13534
+		[followers_count] => 954
+		[following_count] => 472
+		[tweets] => Array
+			(
+				[0] => Array
+					(
+						[url] => http://twitter.com/cosmocatalano/status/385214631838744576
+						[text] => @mindykaling Prequels?! Mindy…I thought we were bros.
+						[html] => @mindykaling Prequels?! Mindy…I thought we were bros.
+						[date] => 1380677299
+						[user] => cosmocatalano
+						[id] => 14503633
+						[img] => https://si0.twimg.com/profile_images/2225916199/image_normal.jpg
+						[name] => Cosmo Catalano
+						[rt] => 
+					)
 
-        )
- 
-**url** is the permalink of the tweet.
+				[1] => Array
+					(
+						[url] => http://twitter.com/cosmocatalano/status/385194119926386689
+						[text] => Forget the weak reframing and worse policy—look at that GOP #contrastfail. http://instagram.com/p/e8bYPJond9/ 
+						[html] => Forget the weak reframing and worse policy—look at that GOP #contrastfail. http://instagram.com/p/e8bYPJond9/ 
+						[date] => 1380672409
+						[user] => cosmocatalano
+						[id] => 14503633
+						[img] => https://si0.twimg.com/profile_images/2225916199/image_normal.jpg
+						[name] => Cosmo Catalano
+						[rt] => 
+						[card] => Array
+							(
+								[href] => http://instagram.com/p/e8bYPJond9/
+								[data-url] => http://distilleryimage1.ak.instagram.com/eedaf25c2af511e385d522000a9f3c76_8.jpg
+								[data-resolved-url-large] => http://distilleryimage1.ak.instagram.com/eedaf25c2af511e385d522000a9f3c76_8.jpg
+							)
 
-**text** is the plaintext contents of the tweet.
+					)
+			)
+	)
 
-**html** is the HTML of the tweet, escaped and with Twitter's classes preserved.
 
-**date** is the Unix timestamp of the tweet.
+_Main Account information_
 
-**user** is the username of the tweet author
+*	**name** is the human-friendly name of the user.
+*	**bio** is the bio (description) of the user.
+*	**location** is the location of the user.
+*	**url** is the permalink of the user.
+*	**img** is the URL of the tweet author's avatar.
+*	**id** is the user id.
+*	**tweets_count** is the total tweets count of the user.
+*	**followers_count** is the total followers count of the user.
+*	**following_count** is the total followings count of the user.
+	
 
-**id** is the user id of the tweet author.
-
-**img** is the location of the tweet author's avatar.
-
-**name** is the human-friendly name of the tweet author.
-
-**rt** indicates whether or not the tweet is a retweet.
-
-**card** is the array of rich-media data associated with a tweet. 
+For _tweets_
+	
+*	**url** is the permalink of the tweet.
+*	**text** is the plaintext contents of the tweet.
+*	**html** is the HTML of the tweet, escaped and with Twitter's classes preserved.
+*	**date** is the Unix timestamp of the tweet.
+*	**user** is the username of the tweet author
+*	**id** is the user id of the tweet author.
+*	**img** is the URL of the tweet author's avatar.
+*	**name** is the human-friendly name of the tweet author.
+*	**rt** indicates whether or not the tweet is a retweet.
+*	**card** is the array of rich-media data associated with a tweet. 
 
 For _images_ (Twitpic, Instagram (yes!) etc.):
 
