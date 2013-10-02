@@ -202,7 +202,7 @@ class Tweets2array {
 		$out=array();
 		foreach($this->finders['profile_regexs'] as $key => $pattern){
 			preg_match($pattern, $source, $matches);
-			$out[$key]=trim(html_entity_decode($matches[1]));
+			$out[$key]=trim($this->html_entity_decode_utf8($matches[1]));
 		}
 		return $out;
 	}
@@ -216,6 +216,24 @@ class Tweets2array {
 			$out[$key]=trim(preg_replace('#[^\d]+#','',$matches[1]));
 		}
 		return $out;
+	}
+
+	// ---------------------------------------------------------------------------------------------------------------------
+	//decode entities  and output as utf8
+	private function html_entity_decode_utf8($txt) {
+		
+		//is this really needed ?????????, At least not for &nbsp;','&#39;','&quot;
+		$html_scrubs = array('&nbsp;','&#39;','&quot;', '&lt;', '&rt;');
+		$html_ringers = array(    ' ',    "'",     '"',    '<',  '>');
+		$txt=str_replace($html_scrubs, $html_ringers,$txt);
+		//----------
+
+		if(function_exists('mb_convert_encoding')){
+			return preg_replace_callback("/(&#[0-9]+;)/", function($m) { return mb_convert_encoding($m[1], "UTF-8", "HTML-ENTITIES"); }, $txt);
+		}
+		else{
+			return html_entity_decode($txt,ENT_QUOTES,'UTF-8');
+		}
 	}
 
 	// ---------------------------------------------------------------------------------------------------------------------
@@ -360,9 +378,6 @@ class Tweets2array {
 		$links	= $this->tweet_links($source, $itr);
 		$dates	= $this->tweet_dates($source);
 	
-		//some characters that need attention
-		$html_scrubs = array('&nbsp;','&#39;','&quot;', '&lt;', '&rt;');
-		$html_ringers = array(    ' ',    "'",     '"',    '<',  '>');
 	
 		//Checking user preferences on how much data to send back
 		$all_tweets = array();
@@ -388,7 +403,7 @@ class Tweets2array {
 			//creating the return array for each tweet
 			$each_tweet = array(
 				'url'	 => 'http://twitter.com'.$links[$i],
-				'text'   => html_entity_decode(str_replace($html_scrubs, $html_ringers, strip_tags($tweets[$i]))),
+				'text'   => $this->html_entity_decode_utf8(strip_tags($tweets[$i])),
 				'html'  => $tweets[$i],
 				'date' 	 => $dates[$i],
 				'user'   => preg_replace('#^/#','',$avatars[$i][0]),
