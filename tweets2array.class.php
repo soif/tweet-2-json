@@ -436,6 +436,7 @@ class Tweets2array {
 			$card_data = array();
 			foreach($targets as $target) {
 				preg_match('/'.$target.'="([\S]*)"/', $matches[0], $card_attr); //this shouldn't need to change
+				if(preg_match('#^//twitter\.com#', $card_attr[1])){ $card_attr[1]='https:'. $card_attr[1];}
 				$card_data[$target] = $card_attr[1];
 			}
 		}
@@ -465,7 +466,7 @@ class Tweets2array {
 		$target = urlencode($dirty_target);
 
 		//initial scrape
-		$onebox_source = $this->Fetch("https://twitter.com/".$search.$target);
+		$onebox_source = $this->Fetch("http://twitter.com/".$search.$target);
 
 		// get profile
 		$out=$this->extract_profile($onebox_source);
