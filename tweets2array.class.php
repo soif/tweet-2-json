@@ -7,7 +7,7 @@ https://github.com/cosmocatalano/tweet-2-json
 Originally by Cosmo Catalano - http://cosmocatalano.com
 Forked by Soif - https://github.com/soif
 
-version 1.01
+version 1.1
 */
 
 class Tweets2array {
@@ -16,12 +16,12 @@ class Tweets2array {
 	//here are the strings this script uses to find the data it wants. 
 	//Twitter might change them—they're up here so you can update & repair easily.
 	var $finders = array(
-	    'onebox-find'			=>	    '/<div class="onebox[\s\S]*<h2 class="/U',
-	    'onebox-replace' 		=>		'<h2 class="',
+	    'onebox_find'			=>	    '/<div class="onebox[\s\S]*<h2 class="/U',
+	    'onebox_replace' 		=>		'<h2 class="',
 
-		'content-explode-top1'	=> 	' tweet-text',    	//relies on another class being assigned before it. very sketchy.
-		'content-explode-top2'	=> 	'js-tweet-text',    //relies on another class being assigned before it. very sketchy.
-		'content-explode-bottom'=> 	'</p>',
+		'content_explode_top1'	=> 	' tweet-text',    	//relies on another class being assigned before it. very sketchy.
+		'content_explode_top2'	=> 	'js-tweet-text',    //relies on another class being assigned before it. very sketchy.
+		'content_explode_bottom'=> 	'</p>',
 
 		'content_from_regexs1'	=> array(
 									0 => '#<\/?[sb]>#',
@@ -60,11 +60,11 @@ class Tweets2array {
 
 
 
-		'avatar-explode-top1'	=>		'class="account-group', //actually, any explode scraping is kinda sketch
-		'avatar-explode-top2'	=>		'class="ProfileTweet-authorDetails', //actually, any explode scraping is kinda sketch
+		'avatar_explode_top1'	=>		'class="account-group', //actually, any explode scraping is kinda sketch
+		'avatar_explode_top2'	=>		'class="ProfileTweet-authorDetails', //actually, any explode scraping is kinda sketch
 
-		'avatar-explode-bottom1'	=>		'/strong>',
-		'avatar-explode-bottom2'	=>		'/b>',
+		'avatar_explode_bottom1'	=>		'/strong>',
+		'avatar_explode_bottom2'	=>		'/b>',
 
 		'avatar_regexs1' 		=> 	array(
 											'user'   => '/href\="([\/A-z0-9-_]*)/',
@@ -79,10 +79,10 @@ class Tweets2array {
 											'name'   => '/"ProfileTweet-fullname[^"]+">([^<]*)/'
 										),
 									
-		'links-regex'			=> 	'/<a class="details with-icn js-details" href="([\/A-z0-9]*)">/',
-		'dates-regex'       	=> 	'/data\-time\="([0-9]*)"/',
-		'cards-regex'			=> 	'/media-thumbnail[^&][\s\SA-z0-9\"\=\-\:\/\?\&\;\_]*>/U',
-		'video-regex'			=>		'/<iframe class="card2-player-iframe"[\s\S]*<\/h3>/',
+		'links_regex'			=> 	'/<a class="details with-icn js-details" href="([\/A-z0-9]*)">/',
+		'dates_regex'       	=> 	'/data\-time\="([0-9]*)"/',
+		'cards_regex'			=> 	'/media-thumbnail[^&][\s\SA-z0-9\"\=\-\:\/\?\&\;\_]*>/U',
+		'video_regex'			=>		'/<iframe class="card2-player-iframe"[\s\S]*<\/h3>/',
 	
 		'cards_data_regexs' 	=> 	array(
 											'href'   => 'href',
@@ -247,13 +247,13 @@ class Tweets2array {
 	// ---------------------------------------------------------------------------------------------------------------------
 	//removes content-less onebox that fools avatar search
 	private function kill_onebox ($source) {
-		return preg_replace($this->finders['onebox-find'], $this->finders['onebox-replace'], $source);
+		return preg_replace($this->finders['onebox_find'], $this->finders['onebox_replace'], $source);
 	}
 
 	// ---------------------------------------------------------------------------------------------------------------------
 	private function SetFindersFromVersion () {
 		$v=$this->tw_version or $v=1;
-		$f_names=array('content-explode-top','content_from_regexs','content_tos','avatar-explode-top','avatar-explode-bottom','avatar_regexs');
+		$f_names=array('content_explode_top','content_from_regexs','content_tos','avatar_explode_top','avatar_explode_bottom','avatar_regexs');
 		foreach($f_names as $name){
 				$this->finders[$name] = $this->finders[$name.$v];
 		}
@@ -265,14 +265,14 @@ class Tweets2array {
 	//breaks the page into chunks of containing to tweets & data, more or less			
 	private function tweet_content($source, $itr) {
 
-		$shards = explode($this->finders['content-explode-top'], $source);
+		$shards = explode($this->finders['content_explode_top'], $source);
 
 		$tweets = array();
 		if ($itr == FALSE) {
 			$itr = count($shards);
 		}
 		for ($i = 1;  $i <= $itr; $i++) {
-			$dirty_tweet = explode($this->finders['content-explode-bottom'], $shards[$i]);
+			$dirty_tweet = explode($this->finders['content_explode_bottom'], $shards[$i]);
 			$clean_tweet = ltrim($dirty_tweet[0],'">' );
 			$replaced = preg_replace($this->finders['content_from_regexs'], $this->finders['content_tos'], $clean_tweet);
 			array_push($tweets, $replaced);
@@ -285,13 +285,13 @@ class Tweets2array {
 	//This pulls avatar src, username (of tweeter), name, id
 	private function tweet_avatar($source, $itr) {
 		$patterns = $this->finders['avatar_regexs'];
-		$shards = explode($this->finders['avatar-explode-top'], $source);
+		$shards = explode($this->finders['avatar_explode_top'], $source);
 		$avatars = array();
 		if ($itr == FALSE) {
 			$itr = count($shards);
 		}
 		for ($i = 1;  $i <= $itr; $i++) {
-			$dirty_avatar = explode($this->finders['avatar-explode-bottom'], $shards[$i]);
+			$dirty_avatar = explode($this->finders['avatar_explode_bottom'], $shards[$i]);
 			array_push($avatars, $dirty_avatar[0]);
 		}
 		$clean_data = array();
@@ -310,14 +310,14 @@ class Tweets2array {
 	// ---------------------------------------------------------------------------------------------------------------------
 	// pulls the links from a tweet
 	private function tweet_links($source) {
-		preg_match_all($this->finders['links-regex'], $source, $links);
+		preg_match_all($this->finders['links_regex'], $source, $links);
 		return $links[1];
 	}
 
 	// ---------------------------------------------------------------------------------------------------------------------
 	//pulls the timestamps from a tweet
 	private function tweet_dates($source) {
-		preg_match_all($this->finders['dates-regex'], $source, $timestamps);
+		preg_match_all($this->finders['dates_regex'], $source, $timestamps);
 		return($timestamps[1]);
 	}
 
@@ -425,12 +425,12 @@ class Tweets2array {
 	//pulls any twitter "cards" from tweets, including making up fake ones out of instagram
 	private function get_cards($url) {
 		$source = $this->Fetch($url);
-		$pattern = $this->finders['cards-regex'];
+		$pattern = $this->finders['cards_regex'];
 		preg_match($pattern, $source, $matches);
 	
 	//looking for a youtube/vine/video generally link
 		if ($matches === array()) {
-			$vid_pattern = $this->finders['video-regex'];
+			$vid_pattern = $this->finders['video_regex'];
 			preg_match($vid_pattern, $source, $vid_matches);
 			if ($vid_matches !== array()) {
 				$needles = $this->finders['video_data_regexs'];
