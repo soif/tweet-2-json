@@ -1,9 +1,11 @@
-#tweets2array Documentation
 
-##About 
+# Tweets2array Documentation
+
+## About 
 
 tweets2array is a Twitter scraper that functions like an API. It takes data publicly available on Twitter.com and reformats it into programming-friendly Array or JSON for your hacking needs.
-###But doesn't Twitter already have an API?
+
+### But doesn't Twitter already have an API?
 
 Yep--and if you're OK with their terms of use you should use it. 
 
@@ -15,7 +17,7 @@ Some reasons you might want to use this instead:
 *	You want tweeted images from Instagram to show up as cards like every other service
 *	You're punk rock
 
-##Setup
+## Setup
 
 tweets2array is stupidly easy to install: download the script and put it where you want to run it. It uses `json_encode()` and so requires PHP 5.2 or better.
 
@@ -28,10 +30,10 @@ Comments in the code and the [Usage](#usage) section below will indicate how to 
 will do it, provided the file path in your `include()` is correct.
 
 <a id="usage"></a>
-##Usage
+## Usage
 
 
-###Init
+### Init
 
 	$tw=new tweets2array();
 
@@ -43,12 +45,12 @@ If you want to init the class like the original (legacy) tweet2json.php , do thi
 
 The output will be JSON encoded.
 
-###Methods
+### Methods
 tweets2array has two main public methods: `GetUser()`, which returns tweet data from a public account by username, and `GetSearch()`, which returns public tweet data from Twitter search based on a given query.
 
 you might cache queries by using the `SetCache()` method. (See example.php file)
 
-####GetUser Method
+#### GetUser Method
 
 `GetUser()`  returns tweet data from a public account by username. It accepts four arguments, only of which is required.
 
@@ -64,7 +66,7 @@ An example command:
 
 	$tw->GetUser('cosmocatalano', 1, TRUE);
 
-#####Return
+##### Return
 
 `GetUser()` Returns an Array object with an entry for each tweet. It looks like this:
 
@@ -154,7 +156,7 @@ For _video_ (Vine, YouTube, Vimeo):
 *	**iframe** the HTML iframe that displays the video.
 *	**href** the location of the page containing the video.
 
-####GetSearch Method
+#### GetSearch Method
 
 `GetSearch()` returns public tweet data from Twitter search based on a given query. It accepts four arguments, one of which is required.
 
@@ -172,22 +174,22 @@ An example command:
 
 	$tw->GetSearch('obama', 1, TRUE, FALSE);
 	
-#####Return
+##### Return
 
 `GetSearch()` Returns a JSON object with an entry for each tweet, with the same values as `user_tweets()` listed above.
 
 
-##FAQ
+## FAQ
 
-###Won't Twitter just block this?
+### Won't Twitter just block this?
 
 They could, but it would be hard to do because of user-agent spoofing, distribution across different IPs and the like. 
 
-###Isn't this scrape subject to failing at any time?
+### Isn't this scrape subject to failing at any time?
 
 Yes--Twitter is extremely likely to break it with design updates from time to time, which is why all the regexes and explode strings that it uses are stored in an array at the front of the script for easy repair. I plan to maintain it as closely as I can.
 
-###You used regex for parsing HTML?
+### You used regex for parsing HTML?
 
 Father forgive me for I have sinned.
 
